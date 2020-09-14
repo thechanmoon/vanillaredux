@@ -1,30 +1,37 @@
+import { createStore } from 'redux'
+
 let add = document.getElementById('add')
 let minus = document.getElementById('minus')
-// let number = document.querySelector('span')
+let number = document.querySelector('span')
 
-// console.log(add, minus, number)
+const ADD = 'ADD'
+const MINUS = 'MINUS'
 
-let count = 0
-
-const updateNumber = (number) => {
-	count = number
-	document.querySelector('span').innerHTML = count
+const reducer = (count = 0, action) => {
+	console.log('reducer called', action)
+	switch (action.type) {
+		case ADD:
+			return count + 1
+		case MINUS:
+			return count - 1
+		default:
+			return count
+	}
 }
 
-// const handleAddClick = () => {
-// 	console.log('plus button clicked')
-// 	updateNumber(count + 1)
-// }
+const store = createStore(reducer)
 
-// const handleMinusClick = () => {
-// 	console.log('minus button clicked')
-// 	updateNumber(count - 1)
-// }
+store.subscribe(() => {
+	// console.log('subscribe', store.getState())
+	number.innerText = store.getState()
+})
 
 add.addEventListener('click', () => {
-	updateNumber(count + 1)
+	store.dispatch({ type: ADD })
 })
+
 minus.addEventListener('click', () => {
-	updateNumber(count - 1)
+	store.dispatch({ type: MINUS })
 })
-updateNumber(count)
+
+console.log(store, store.getState())
